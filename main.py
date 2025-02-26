@@ -1,13 +1,5 @@
-# kalendarz
-# -----------------------
-# funkcjonalności:
-# - otwiera się kiedy są jakieś wpisy danego dnia
-# - włącza alarm kiedy są jakieś wpisy
-# - można zaznaczać kolorami ciągi dni tygodnia/tygodnie wyjazdy itp
-# - możliwość przekonwertowania kliknięciem na głagolicę
-# - na hasło
-# - zmienia date i aktualizuje się przez neta
 
+import sys
 from PyQt6.QtWidgets import QApplication, QWidget
 
 
@@ -27,9 +19,6 @@ class Calendar(QWidget):
 
 
 if __name__ == '__main__':
-    import sys
-
     app = QApplication(sys.argv)
     window = Calendar()
-    # print(calendar.weekday(2025, 2, 21))
     sys.exit(app.exec())
