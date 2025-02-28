@@ -1,9 +1,15 @@
 
 import sys
+import calendar
 from PyQt6.QtWidgets import QApplication, QWidget
 
 
-# TODO - function to generate a calendar
+def generate_calendar():
+    year = 2025
+    month = 3
+    cal = calendar.month(year, month)
+    return cal
+
 
 class Calendar(QWidget):
     def __init__(self, parent=None):
