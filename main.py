@@ -1,7 +1,7 @@
 
 import sys
 import calendar
-from PyQt6.QtWidgets import QApplication, QWidget
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel
 
 
 def generate_calendar():
@@ -19,7 +19,13 @@ class Calendar(QWidget):
 
     def interface(self):
 
+        layout = QVBoxLayout()
+        cal_label = QLabel(generate_calendar())
+        cal_label.setStyleSheet("font-size: 14pt;")
+        layout.addWidget(cal_label)
+
         # TODO - current day month year
+        self.setLayout(layout)
         self.setWindowTitle("Kalendarz")
         self.show()
 
