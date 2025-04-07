@@ -1,6 +1,6 @@
 import sys
 import calendar
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog
 from PyQt6.QtCore import Qt
 
 
@@ -37,11 +37,14 @@ class Calendar(QWidget):
                 if day != 0:
                     btn = QPushButton(str(day))
                     btn.setFixedSize(40, 40)
-                    # change button color
+                    btn.clicked.connect(lambda checked, b=btn: self.cell_color(b))
                     self.grid_layout.addWidget(btn, row, col)
                     self.buttons.append(btn)
 
-        # def change button color
+    def cell_color(self, button):
+        color = QColorDialog.getColor()
+        if color.isValid():
+            button.setStyleSheet(f"background-color: {color.name()}")
 
 
 if __name__ == '__main__':
