@@ -1,5 +1,8 @@
 import sys
 import calendar
+import datetime
+
+from PyQt6.QtGui import QFont
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog
 from PyQt6.QtCore import Qt
 
@@ -14,14 +17,21 @@ class Calendar(QWidget):
 
         layout = QVBoxLayout()
 
-        # TODO - current day month year
         self.setLayout(layout)
         self.resize(400, 400)
         self.setWindowTitle("Kalendarz")
         self.grid_layout = QGridLayout()
+        self.today_date()
         self.calendar_days()
         layout.addLayout(self.grid_layout)
         self.show()
+
+    def today_date(self):
+        today = datetime.date.today()
+        label = QLabel(str(today))
+        label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.grid_layout.addWidget(label)
+        # date setting "month year"
 
     def calendar_days(self, year=2025, month=3):
         cal = calendar.monthcalendar(year, month)
@@ -29,10 +39,10 @@ class Calendar(QWidget):
         for col, day in enumerate(days):
             label = QLabel(day)
             label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.grid_layout.addWidget(label, 0, col)
+            self.grid_layout.addWidget(label, 1, col)
 
         self.buttons = []
-        for row, week in enumerate(cal, start=1):
+        for row, week in enumerate(cal, start=2):
             for col, day in enumerate(week):
                 if day != 0:
                     btn = QPushButton(str(day))
@@ -49,5 +59,6 @@ class Calendar(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
+    app.setFont(QFont("Arial", 12))
     window = Calendar()
     sys.exit(app.exec())
