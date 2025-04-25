@@ -3,7 +3,7 @@ import calendar
 import datetime
 
 from PyQt6.QtGui import QFont
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, QMenuBar
 from PyQt6.QtCore import Qt
 
 
@@ -16,6 +16,12 @@ class Calendar(QWidget):
     def interface(self):
 
         layout = QVBoxLayout()
+
+        menubar = QMenuBar(self)
+        file_menu = menubar.addMenu("Test")
+
+        layout.setMenuBar(menubar)
+        self.setLayout(layout)
 
         self.setLayout(layout)
         self.resize(400, 400)
