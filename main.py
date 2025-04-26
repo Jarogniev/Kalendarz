@@ -17,24 +17,29 @@ class Calendar(QWidget):
 
         layout = QVBoxLayout()
 
-        menubar = QMenuBar(self)
-        file_menu = menubar.addMenu("Menu")
-
-        open_action = QAction("test_Otwórz", self)
-        exit_action = QAction("test_Zamknij", self)
-        # add close to button
-        file_menu.addAction(open_action)
-        file_menu.addAction(exit_action)
-        layout.setMenuBar(menubar)
-
         self.setLayout(layout)
         self.resize(400, 400)
         self.setWindowTitle("Kalendarz")
         self.grid_layout = QGridLayout()
+        menubar = self.options()
+        layout.setMenuBar(menubar)
         self.today_date()
         self.calendar_days()
         layout.addLayout(self.grid_layout)
         self.show()
+
+    def options(self):
+        menubar = QMenuBar(self)
+
+        file_menu = menubar.addMenu("Opcje")
+
+        open_action = QAction("test_Otwórz", self)
+        exit_action = QAction("Zamknij", self)
+        exit_action.triggered.connect(self.close)
+        file_menu.addAction(open_action)
+        file_menu.addAction(exit_action)
+
+        return menubar
 
     def today_date(self):
         today = datetime.date.today()
