@@ -3,7 +3,8 @@ import calendar
 import datetime
 
 from PyQt6.QtGui import QFont, QAction
-from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, QMenuBar
+from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, \
+    QMenuBar, QMenu
 from PyQt6.QtCore import Qt
 
 
@@ -39,7 +40,20 @@ class Calendar(QWidget):
         file_menu.addAction(open_action)
         file_menu.addAction(exit_action)
 
+        menubar.addMenu(self.create_edit_menu())
+
         return menubar
+
+    def create_edit_menu(self):
+        edit_menu = QMenu("Edycja", self)
+
+        change_action = QAction("Zmiana Alfabetu", self)
+
+
+        edit_menu.addAction(change_action)
+
+
+        return edit_menu
 
     def today_date(self):
         today = datetime.date.today()
