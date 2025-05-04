@@ -22,36 +22,37 @@ class Calendar(QWidget):
         self.resize(400, 400)
         self.setWindowTitle("Kalendarz")
         self.grid_layout = QGridLayout()
-        menubar = self.options()
+        menubar = self.create_menu()
         layout.setMenuBar(menubar)
         self.today_date()
         self.calendar_days()
         layout.addLayout(self.grid_layout)
         self.show()
 
-    def options(self):
+    def create_menu(self):
         menubar = QMenuBar(self)
 
-        file_menu = menubar.addMenu("Opcje")
-
-        open_action = QAction("test_Otwórz", self)
-        exit_action = QAction("Zamknij", self)
-        exit_action.triggered.connect(self.close)
-        file_menu.addAction(open_action)
-        file_menu.addAction(exit_action)
+        menubar.addMenu(self.create_options())
 
         menubar.addMenu(self.create_edit_menu())
 
         return menubar
 
+    def create_options(self):
+        file_menu = QMenu("Opcje", self)
+
+        open_action = QAction("Otwórz", self)
+        exit_action = QAction("Zamknij", self)
+        exit_action.triggered.connect(self.close)
+        file_menu.addAction(open_action)
+        file_menu.addAction(exit_action)
+
+        return file_menu
+
     def create_edit_menu(self):
         edit_menu = QMenu("Edycja", self)
-
         change_action = QAction("Zmiana Alfabetu", self)
-
-
         edit_menu.addAction(change_action)
-
 
         return edit_menu
 
