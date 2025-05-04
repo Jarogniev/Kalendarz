@@ -4,7 +4,7 @@ import datetime
 
 from PyQt6.QtGui import QFont, QAction
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, \
-    QMenuBar, QMenu
+    QMenuBar, QMenu, QInputDialog
 from PyQt6.QtCore import Qt
 
 
@@ -33,7 +33,6 @@ class Calendar(QWidget):
         menubar = QMenuBar(self)
 
         menubar.addMenu(self.create_options())
-
         menubar.addMenu(self.create_edit_menu())
 
         return menubar
@@ -51,6 +50,7 @@ class Calendar(QWidget):
 
     def create_edit_menu(self):
         edit_menu = QMenu("Edycja", self)
+
         change_action = QAction("Zmiana Alfabetu", self)
         edit_menu.addAction(change_action)
 
@@ -77,9 +77,16 @@ class Calendar(QWidget):
                 if day != 0:
                     btn = QPushButton(str(day))
                     btn.setFixedSize(40, 40)
-                    btn.clicked.connect(lambda checked, b=btn: self.cell_color(b))
+                    btn.clicked.connect(lambda checked, b=btn: self.edit_note(b))
+                    # btn.clicked.connect(lambda checked, b=btn: self.cell_color(b))
                     self.grid_layout.addWidget(btn, row, col)
                     self.buttons.append(btn)
+
+    def edit_note(self, button):
+        text, ok = QInputDialog.getText(self, "Dodaj notatkę", "Wpisz notatkę:")
+        if ok and text:
+            button.setToolTip(text)
+            button.setStyleSheet("background-color: lightblue")
 
     def cell_color(self, button):
         color = QColorDialog.getColor()
