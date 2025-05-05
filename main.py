@@ -2,9 +2,9 @@ import sys
 import calendar
 import datetime
 
-from PyQt6.QtGui import QFont, QAction
+from PyQt6.QtGui import QFont, QAction, QCursor
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, \
-    QMenuBar, QMenu, QInputDialog
+    QMenuBar, QMenu
 from PyQt6.QtCore import Qt
 
 
@@ -83,10 +83,23 @@ class Calendar(QWidget):
                     self.buttons.append(btn)
 
     def edit_note(self, button):
-        text, ok = QInputDialog.getText(self, "Dodaj notatkę", "Wpisz notatkę:")
-        if ok and text:
-            button.setToolTip(text)
-            button.setStyleSheet("background-color: lightblue")
+        menu = QMenu()
+        edit_action = QAction("Edytuj notatkę", self)
+        delete_action = QAction("Usuń notatkę", self)
+
+        menu.addAction(edit_action)
+        menu.addAction(delete_action)
+
+        edit_action.triggered.connect(lambda: self.add_or_edit_note())
+        delete_action.triggered.connect(lambda: self.delete_note())
+
+        menu.exec(QCursor.pos())
+
+    def add_or_edit_note(self):
+        pass
+
+    def delete_note(self):
+        pass
 
     def cell_color(self, button):
         color = QColorDialog.getColor()
