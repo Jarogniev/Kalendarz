@@ -4,7 +4,7 @@ import datetime
 
 from PyQt6.QtGui import QFont, QAction, QCursor
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, \
-    QMenuBar, QMenu
+    QMenuBar, QMenu, QInputDialog
 from PyQt6.QtCore import Qt
 
 
@@ -90,15 +90,22 @@ class Calendar(QWidget):
         menu.addAction(edit_action)
         menu.addAction(delete_action)
 
-        edit_action.triggered.connect(lambda: self.add_or_edit_note())
-        delete_action.triggered.connect(lambda: self.delete_note())
+        edit_action.triggered.connect(lambda: self.add_or_edit_note(button))
+        delete_action.triggered.connect(lambda: self.delete_note(button))
 
         menu.exec(QCursor.pos())
 
-    def add_or_edit_note(self):
-        pass
+    def add_or_edit_note(self, button):
+        current_note = button.toolTip() or ""
+        text, ok = QInputDialog.getText(self, "Notatka", "Edytuj notatkę:", text=current_note)
+        if ok:
+            button.setToolTip(text)
+            if text.strip():
+                button.setStyleSheet("background-color: lightblue")
+            else:
+                button.setStyleSheet("")
 
-    def delete_note(self):
+    def delete_note(self, button):
         pass
 
     def cell_color(self, button):
