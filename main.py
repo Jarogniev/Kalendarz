@@ -106,7 +106,8 @@ class Calendar(QWidget):
                 button.setStyleSheet("")
 
     def delete_note(self, button):
-        pass
+        button.setToolTip("")
+        button.setStyleSheet("")
 
     def cell_color(self, button):
         color = QColorDialog.getColor()
