@@ -25,6 +25,7 @@ class Calendar(QWidget):
         menubar = self.create_menu()
         layout.setMenuBar(menubar)
         self.today_date()
+        self.load_notes()
         self.calendar_days()
         layout.addLayout(self.grid_layout)
         self.show()
@@ -115,6 +116,11 @@ class Calendar(QWidget):
         if color.isValid():
             button.setStyleSheet(f"background-color: {color.name()}")
 
+    def save_notes(self):
+        pass
+
+    def load_notes(self):
+        pass
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
