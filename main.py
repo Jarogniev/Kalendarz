@@ -77,7 +77,8 @@ class Calendar(QWidget):
                 if day != 0:
                     btn = QPushButton(str(day))
                     btn.setFixedSize(40, 40)
-                    btn.clicked.connect(lambda checked, b=btn: self.edit_note(b))
+                    btn.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
+                    btn.customContextMenuRequested.connect(lambda pos, b=btn: self.edit_note(b))
                     # btn.clicked.connect(lambda checked, b=btn: self.cell_color(b))
                     self.grid_layout.addWidget(btn, row, col)
                     self.buttons.append(btn)
