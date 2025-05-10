@@ -1,3 +1,5 @@
+import json
+import os
 import sys
 import calendar
 import datetime
@@ -13,6 +15,8 @@ class Calendar(QWidget):
         super().__init__(parent)
 
         self.interface()
+        self.notes = {}  # key: "YYYY-MM-DD"
+        self.note_file = "notes.json"
 
     def interface(self):
 
@@ -117,10 +121,14 @@ class Calendar(QWidget):
             button.setStyleSheet(f"background-color: {color.name()}")
 
     def save_notes(self):
-        pass
+        with open(self.note_file, "w", encoding="utf-8") as f:
+            json.dump(self.notes, f, ensure_ascii=False, indent=2)
 
     def load_notes(self):
-        pass
+        if os.path.exists(self.note_file):
+            with open(self.note_file, "r", encoding="utf-8") as f:
+                self.notes = json.load(f)
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
