@@ -14,9 +14,9 @@ class Calendar(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.interface()
         self.notes = {}  # key: "YYYY-MM-DD"
         self.note_file = "notes.json"
+        self.interface()
 
     def interface(self):
 
