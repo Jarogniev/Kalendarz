@@ -81,6 +81,12 @@ class Calendar(QWidget):
             for col, day in enumerate(week):
                 if day != 0:
                     btn = QPushButton(str(day))
+                    date_str = f"{year}-{month:02d}-{day:02d}"
+                    btn.setProperty("date_str", date_str)
+                    note = self.notes.get(date_str)
+                    if note:
+                        btn.setToolTip(note)
+                        btn.setStyleSheet("background-color: lightblue")
                     btn.setFixedSize(40, 40)
                     btn.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
                     btn.customContextMenuRequested.connect(lambda pos, b=btn: self.edit_note(b))
@@ -102,23 +108,22 @@ class Calendar(QWidget):
         menu.exec(QCursor.pos())
 
     def add_or_edit_note(self, button):
-        current_note = button.toolTip() or ""
+        date_str = button.property("date_str")
+        current_note = self.notes.get(date_str, "")
         text, ok = QInputDialog.getText(self, "Notatka", "Edytuj notatkę:", text=current_note)
         if ok:
+            self.notes[date_str] = text
             button.setToolTip(text)
-            if text.strip():
-                button.setStyleSheet("background-color: lightblue")
-            else:
-                button.setStyleSheet("")
+            button.setStyleSheet("background-color: lightblue" if text.strip() else "")
+            self.save_notes()
 
     def delete_note(self, button):
+        date_str = button.property("date_str")
+        if date_str in self.notes:
+            del self.notes[date_str]
         button.setToolTip("")
         button.setStyleSheet("")
-
-    def cell_color(self, button):
-        color = QColorDialog.getColor()
-        if color.isValid():
-            button.setStyleSheet(f"background-color: {color.name()}")
+        self.save_notes()
 
     def save_notes(self):
         with open(self.note_file, "w", encoding="utf-8") as f:
@@ -128,6 +133,11 @@ class Calendar(QWidget):
         if os.path.exists(self.note_file):
             with open(self.note_file, "r", encoding="utf-8") as f:
                 self.notes = json.load(f)
+
+    def cell_color(self, button):
+            color = QColorDialog.getColor()
+            if color.isValid():
+                button.setStyleSheet(f"background-color: {color.name()}")
 
 
 if __name__ == '__main__':
