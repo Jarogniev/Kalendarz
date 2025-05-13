@@ -6,7 +6,7 @@ import datetime
 
 from PyQt6.QtGui import QFont, QAction, QCursor
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, \
-    QMenuBar, QMenu, QInputDialog
+    QMenuBar, QMenu, QInputDialog, QHBoxLayout
 from PyQt6.QtCore import Qt
 
 
@@ -30,6 +30,19 @@ class Calendar(QWidget):
         layout.setMenuBar(menubar)
         self.today_date()
         self.load_notes()
+
+        # navigation through months
+        nav_layout = QHBoxLayout()
+        prev_button = QPushButton("< Poprzedni")
+        next_button = QPushButton("Następny >")
+        self.month_label = QLabel()
+        prev_button.clicked.connect(self.prev_month)
+        next_button.clicked.connect(self.next_month)
+        nav_layout.addWidget(prev_button)
+        nav_layout.addWidget(self.month_label)
+        nav_layout.addWidget(next_button)
+        layout.addLayout(nav_layout)
+
         self.calendar_days()
         layout.addLayout(self.grid_layout)
         self.show()
@@ -133,6 +146,12 @@ class Calendar(QWidget):
         if os.path.exists(self.note_file):
             with open(self.note_file, "r", encoding="utf-8") as f:
                 self.notes = json.load(f)
+
+    def prev_month(self):
+        pass
+
+    def next_month(self):
+        pass
 
     def cell_color(self, button):
             color = QColorDialog.getColor()
