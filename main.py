@@ -81,7 +81,16 @@ class Calendar(QWidget):
         self.grid_layout.addWidget(label)
         # date setting "month year"
 
-    def calendar_days(self, year=2025, month=3):
+    def calendar_days(self):
+        for i in reversed(range(self.grid_layout.count())):
+            widget = self.grid_layout.itemAt(i).widget()
+            if widget:
+                widget.setParent(None)
+
+        year = self.current_year
+        month = self.current_month
+        self.month_label.setText(f"{calendar.month_name[month]} {year}")
+
         cal = calendar.monthcalendar(year, month)
         days = ["Pon", "Wt", "Śr", "Czw", "Pt", "Sob", "Nd"]
         for col, day in enumerate(days):
@@ -94,13 +103,13 @@ class Calendar(QWidget):
             for col, day in enumerate(week):
                 if day != 0:
                     btn = QPushButton(str(day))
+                    btn.setFixedSize(40, 40)
                     date_str = f"{year}-{month:02d}-{day:02d}"
                     btn.setProperty("date_str", date_str)
                     note = self.notes.get(date_str)
                     if note:
                         btn.setToolTip(note)
                         btn.setStyleSheet("background-color: lightblue")
-                    btn.setFixedSize(40, 40)
                     btn.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
                     btn.customContextMenuRequested.connect(lambda pos, b=btn: self.edit_note(b))
                     # btn.clicked.connect(lambda checked, b=btn: self.cell_color(b))
@@ -154,9 +163,9 @@ class Calendar(QWidget):
         pass
 
     def cell_color(self, button):
-            color = QColorDialog.getColor()
-            if color.isValid():
-                button.setStyleSheet(f"background-color: {color.name()}")
+        color = QColorDialog.getColor()
+        if color.isValid():
+            button.setStyleSheet(f"background-color: {color.name()}")
 
 
 if __name__ == '__main__':
