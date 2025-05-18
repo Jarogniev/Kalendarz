@@ -14,6 +14,8 @@ class Calendar(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        self.current_year = datetime.date.today().year
+        self.current_month = datetime.date.today().month
         self.notes = {}  # key: "YYYY-MM-DD"
         self.note_file = "notes.json"
         self.interface()
@@ -33,9 +35,10 @@ class Calendar(QWidget):
 
         # navigation through months
         nav_layout = QHBoxLayout()
-        prev_button = QPushButton("< Poprzedni")
-        next_button = QPushButton("Następny >")
+        prev_button = QPushButton("Poprzedni")
+        next_button = QPushButton("Następny")
         self.month_label = QLabel()
+        self.month_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         prev_button.clicked.connect(self.prev_month)
         next_button.clicked.connect(self.next_month)
         nav_layout.addWidget(prev_button)
@@ -79,7 +82,6 @@ class Calendar(QWidget):
         label = QLabel(str(today))
         label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.grid_layout.addWidget(label)
-        # date setting "month year"
 
     def calendar_days(self):
         for i in reversed(range(self.grid_layout.count())):
@@ -157,10 +159,18 @@ class Calendar(QWidget):
                 self.notes = json.load(f)
 
     def prev_month(self):
-        pass
+        self.current_month -= 1
+        if self.current_month < 1:
+            self.current_month = 12
+            self.current_year -= 1
+        self.calendar_days()
 
     def next_month(self):
-        pass
+        self.current_month += 1
+        if self.current_month > 12:
+            self.current_month = 1
+            self.current_year += 1
+        self.calendar_days()
 
     def cell_color(self, button):
         color = QColorDialog.getColor()
