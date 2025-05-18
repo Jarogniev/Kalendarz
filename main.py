@@ -48,7 +48,6 @@ class Calendar(QWidget):
 
         self.calendar_days()
         layout.addLayout(self.grid_layout)
-        self.show()
 
     def create_menu(self):
         menubar = QMenuBar(self)
@@ -84,10 +83,11 @@ class Calendar(QWidget):
         self.grid_layout.addWidget(label)
 
     def calendar_days(self):
-        for i in reversed(range(self.grid_layout.count())):
-            widget = self.grid_layout.itemAt(i).widget()
+        while self.grid_layout.count():
+            item = self.grid_layout.takeAt(0)
+            widget = item.widget()
             if widget:
-                widget.setParent(None)
+                widget.deleteLater()
 
         year = self.current_year
         month = self.current_month
@@ -182,4 +182,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setFont(QFont("Arial", 12))
     window = Calendar()
+    window.show()
     sys.exit(app.exec())
