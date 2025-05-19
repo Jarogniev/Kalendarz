@@ -9,6 +9,8 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLay
     QMenuBar, QMenu, QInputDialog, QHBoxLayout
 from PyQt6.QtCore import Qt
 
+from login_window import LoginWindow
+
 
 class Calendar(QWidget):
     def __init__(self, parent=None):
@@ -181,6 +183,6 @@ class Calendar(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     app.setFont(QFont("Arial", 12))
-    window = Calendar()
-    window.show()
+    login = LoginWindow()
+    login.show()
     sys.exit(app.exec())
