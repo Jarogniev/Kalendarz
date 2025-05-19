@@ -1,5 +1,4 @@
 from PyQt6.QtWidgets import QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QMessageBox
-from main import Calendar
 
 class LoginWindow(QWidget):
     def __init__(self):
@@ -22,10 +21,10 @@ class LoginWindow(QWidget):
         self.setLayout(layout)
 
     def check_password(self):
-        password = self.password_input.text()
-        if password == "tajne123":  # <-- TUTAJ zmień swoje hasło
+        from main import Calendar
+        if self.password_input.text() == "123":
             self.calendar = Calendar()
             self.calendar.show()
             self.close()
         else:
-            QMessageBox.warning(self, "Błąd", "Nieprawidłowe hasło!")
+            QMessageBox.warning(self, "Błąd", "Kaktus! \n Nieprawidłowe hasło!")
