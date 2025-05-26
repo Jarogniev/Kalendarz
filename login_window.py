@@ -8,6 +8,9 @@ class LoginWindow(QWidget):
         self.setWindowTitle("Logowanie")
         self.setFixedSize(300, 150)
 
+        self.attempts = 0
+        self.max_attempts = 3
+
         layout = QVBoxLayout()
 
         self.label = QLabel("Podaj hasło:")
@@ -35,9 +38,23 @@ class LoginWindow(QWidget):
 
         password = self.password_input.text()
         if password == "123":
+            self.attempts = 0
             self.calendar = Calendar()
             self.calendar.show()
             self.close()
         else:
-            QMessageBox.warning(self, "Błąd", "Kaktus! \n Nieprawidłowe hasło!")
+            self.attempts += 1
+            remaining = self.max_attempts - self.attempts
+
+            if remaining <= 0:
+                QMessageBox.critical(self, "Błąd", "Za dużo nieudanych prób. Aplikacja zostanie zamknięta.")
+                QApplication.quit()
+            else:
+                QMessageBox.warning(
+                    self,
+                    "Błąd",
+                    f"Kaktus! \n Nieprawidłowe hasło! Pozostało prób: {remaining}"
+                )
+                self.password_input.clear()
+
 
