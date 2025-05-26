@@ -6,7 +6,7 @@ import datetime
 
 from PyQt6.QtGui import QFont, QAction, QCursor
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, \
-    QMenuBar, QMenu, QInputDialog, QHBoxLayout
+    QMenuBar, QMenu, QInputDialog, QHBoxLayout, QTextEdit
 from PyQt6.QtCore import Qt
 
 from login_window import LoginWindow
@@ -50,6 +50,10 @@ class Calendar(QWidget):
 
         self.calendar_days()
         layout.addLayout(self.grid_layout)
+        self.note_display = QTextEdit()
+        self.note_display.setReadOnly(True)
+        layout.addWidget(self.note_display)
+        self.update_note_display()
 
     def create_menu(self):
         menubar = QMenuBar(self)
@@ -142,6 +146,7 @@ class Calendar(QWidget):
             button.setToolTip(text)
             button.setStyleSheet("background-color: lightblue" if text.strip() else "")
             self.save_notes()
+            self.update_note_display()
 
     def delete_note(self, button):
         date_str = button.property("date_str")
@@ -166,6 +171,7 @@ class Calendar(QWidget):
             self.current_month = 12
             self.current_year -= 1
         self.calendar_days()
+        self.update_note_display()
 
     def next_month(self):
         self.current_month += 1
@@ -173,6 +179,22 @@ class Calendar(QWidget):
             self.current_month = 1
             self.current_year += 1
         self.calendar_days()
+        self.update_note_display()
+
+    def update_note_display(self):
+        current_notes = []
+        for date_str, note in self.notes.items():
+            try:
+                date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
+                if date.year == self.current_year and date.month == self.current_month:
+                    current_notes.append(f"{date_str}: {note}")
+            except ValueError:
+                pass
+
+        if current_notes:
+            self.note_display.setText("\n".join(sorted(current_notes)))
+        else:
+            self.note_display.setText("Brak notatek w tym miesiącu.")
 
     def cell_color(self, button):
         color = QColorDialog.getColor()
