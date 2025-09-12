@@ -78,6 +78,14 @@ class Calendar(QWidget):
         self.update_note_display()
         self.update_todo_list()
 
+    def add_todo(self):
+        task = self.todo_input.text().strip()
+        if task:
+            self.notes.setdefault("todos", []).append(task)
+            self.todo_input.clear()
+            self.update_todo_list()
+            self.save_notes()
+
     def create_menu(self):
         menubar = QMenuBar(self)
 
