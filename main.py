@@ -86,6 +86,13 @@ class Calendar(QWidget):
             self.update_todo_list()
             self.save_notes()
 
+    def remove_todo(self, item):
+        task = item.text()
+        if "todos" in self.notes and task in self.notes["todos"]:
+            self.notes["todos"].remove(task)
+            self.update_todo_list()
+            self.save_notes()
+
     def create_menu(self):
         menubar = QMenuBar(self)
 
