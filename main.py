@@ -6,7 +6,7 @@ import datetime
 
 from PyQt6.QtGui import QFont, QAction, QCursor
 from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGridLayout, QPushButton, QColorDialog, \
-    QMenuBar, QMenu, QInputDialog, QHBoxLayout, QTextEdit
+    QMenuBar, QMenu, QInputDialog, QHBoxLayout, QTextEdit, QLineEdit, QListWidget
 from PyQt6.QtCore import Qt
 
 from login_window import LoginWindow
@@ -23,37 +23,60 @@ class Calendar(QWidget):
         self.interface()
 
     def interface(self):
-
-        layout = QVBoxLayout()
-
-        self.setLayout(layout)
-        self.resize(400, 400)
+        main_layout = QHBoxLayout()
+        self.setLayout(main_layout)
+        self.resize(700, 400)
         self.setWindowTitle("Kalendarz")
+
+        # --- LEWA STRONA: To-do lista ---
+        todo_layout = QVBoxLayout()
+        todo_label = QLabel("Lista rzeczy do zrobienia:")
+        self.todo_input = QLineEdit()
+        self.todo_input.setPlaceholderText("Wpisz zadanie i naciśnij Enter")
+        self.todo_input.returnPressed.connect(self.add_todo)
+
+        self.todo_list = QListWidget()
+        self.todo_list.itemDoubleClicked.connect(self.remove_todo)
+
+        todo_layout.addWidget(todo_label)
+        todo_layout.addWidget(self.todo_input)
+        todo_layout.addWidget(self.todo_list)
+
+        # --- PRAWA STRONA: Kalendarz ---
+        right_layout = QVBoxLayout()
+
         self.grid_layout = QGridLayout()
         menubar = self.create_menu()
-        layout.setMenuBar(menubar)
-        self.today_date()
-        self.load_notes()
+        right_layout.setMenuBar(menubar)
 
-        # navigation through months
         nav_layout = QHBoxLayout()
         prev_button = QPushButton("Poprzedni")
         next_button = QPushButton("Następny")
         self.month_label = QLabel()
         self.month_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         prev_button.clicked.connect(self.prev_month)
         next_button.clicked.connect(self.next_month)
+
         nav_layout.addWidget(prev_button)
         nav_layout.addWidget(self.month_label)
         nav_layout.addWidget(next_button)
-        layout.addLayout(nav_layout)
+        right_layout.addLayout(nav_layout)
+        right_layout.addLayout(self.grid_layout)
 
-        self.calendar_days()
-        layout.addLayout(self.grid_layout)
         self.note_display = QTextEdit()
         self.note_display.setReadOnly(True)
-        layout.addWidget(self.note_display)
+        right_layout.addWidget(self.note_display)
+
+        # Dodaj obie kolumny
+        main_layout.addLayout(todo_layout, 1)
+        main_layout.addLayout(right_layout, 3)
+
+        # Wczytaj dane
+        self.load_notes()
+        self.calendar_days()
         self.update_note_display()
+        self.update_todo_list()
 
     def create_menu(self):
         menubar = QMenuBar(self)
