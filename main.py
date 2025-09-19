@@ -167,18 +167,19 @@ class Calendar(QWidget):
                     self.grid_layout.addWidget(btn, row, col)
                     self.buttons.append(btn)
 
-    def edit_note(self, button):
-        menu = QMenu()
-        edit_action = QAction("Edytuj notatkę", self)
-        delete_action = QAction("Usuń notatkę", self)
+    def edit_note(self, date_str):
+        text, ok = QInputDialog.getText(self, "Dodaj notatkę", f"Notatka dla {date_str}:")
+        if ok and text.strip():
+            # jeśli brak listy, twórz nową
+            self.notes.setdefault(date_str, [])
+            if isinstance(self.notes[date_str], str):
+                # jeśli stara wersja była stringiem, zamień na listę
+                self.notes[date_str] = [self.notes[date_str]]
+            self.notes[date_str].append(text.strip())
 
-        menu.addAction(edit_action)
-        menu.addAction(delete_action)
-
-        edit_action.triggered.connect(lambda: self.add_or_edit_note(button))
-        delete_action.triggered.connect(lambda: self.delete_note(button))
-
-        menu.exec(QCursor.pos())
+            self.save_notes()
+            self.update_note_display()
+            # self.!xyz!(date_str)
 
     def add_or_edit_note(self, button):
         date_str = button.property("date_str")
