@@ -179,7 +179,20 @@ class Calendar(QWidget):
 
             self.save_notes()
             self.update_note_display()
-            # self.!xyz!(date_str)
+            self.update_tooltip(date_str)
+
+    def update_tooltip(self, date_str):
+        if date_str in self.notes:
+            notes = self.notes[date_str]
+            if isinstance(notes, list):
+                tooltip_text = "\n".join(notes)
+            else:
+                tooltip_text = notes
+            # znajdź przycisk i ustaw tooltip
+            for btn in self.buttons:
+                if btn.text() == str(int(date_str.split("-")[2])):  # dzień
+                    btn.setToolTip(tooltip_text)
+                    break
 
     def add_or_edit_note(self, button):
         date_str = button.property("date_str")
