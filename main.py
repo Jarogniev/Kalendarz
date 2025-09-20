@@ -240,11 +240,17 @@ class Calendar(QWidget):
 
     def update_note_display(self):
         current_notes = []
-        for date_str, note in self.notes.items():
+        for date_str, notes in self.notes.items():
+            if date_str == "todos":
+                continue  # pomijamy listę to-do
             try:
                 date = datetime.datetime.strptime(date_str, "%Y-%m-%d").date()
                 if date.year == self.current_year and date.month == self.current_month:
-                    current_notes.append(f"{date_str}: {note}")
+                    if isinstance(notes, list):
+                        for n in notes:
+                            current_notes.append(f"{date_str}: {n}")
+                    else:
+                        current_notes.append(f"{date_str}: {notes}")
             except ValueError:
                 pass
 
